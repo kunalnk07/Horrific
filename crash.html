@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Crash</title>
+    <style>
+        body {
+            background: black;
+            color: red;
+            font-family: monospace;
+            text-align: center;
+            margin-top: 20%;
+        }
+        .glitch { animation: glitch 0.5s infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="glitch">SYSTEM CRASH</h1>
+    <p>Your IP has been logged.</p>
+    <p>They are coming.</p>
+    <script>
+        const audio = new Audio('whisper.mp3');
+        audio.loop = true;
+        audio.play();
+    </script>
+</body>
+</html>
