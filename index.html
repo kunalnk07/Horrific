@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haunted Manor: 4-Player Horror Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Creepster', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('https://i.imgur.com/7QZQZQZ.jpg'); /* Haunted mansion background */
+      background-size: cover;
+      background-position: center;
+    }
+
+    .game-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      width: 100vw;
+      height: 100vh;
+      gap: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .player-area {
+      position: relative;
+      background-color: rgba(17, 17, 17, 0.8); /* Semi-transparent dark background */
+      border: 3px solid #8b0000; /* Blood-red border */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 32px;
+      color: #ff0000; /* Blood-red text */
+      cursor: pointer;
+      overflow: hidden;
+      text-shadow: 2px 2px 5px #000;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .player-area:hover {
+      border-color: #ff4500; /* Brighter red on hover */
+      transform: scale(1.05);
+    }
+
+    .player-area.active {
+      border-color: #ff0000;
+      background-color: rgba(255, 0, 0, 0.1); /* Slight red glow when active */
+    }
+
+    .spooky-animation {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/9QZQZQZ.gif') no-repeat center center; /* Ghost animation */
+      background-size: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .player-area.active .spooky-animation {
+      opacity: 1;
+    }
+
+    .haunted-text {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 48px;
+      color: #ff0000;
+      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 0.8; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .blood-drip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/8QZQZQZ.png') no-repeat center center; /* Blood drip effect */
+      background-size: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .player-area.active .blood-drip {
+      opacity: 0.7;
+    }
+
+    .creepy-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/6QZQZQZ.png') no-repeat center center; /* Creepy face */
+      background-size: cover;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .player-area.active .creepy-face {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="haunted-text">Welcome to the Haunted Manor</div>
+  <div class="game-container">
+    <div class="player-area" id="player1">
+      <div class="spooky-animation"></div>
+      <div class="blood-drip"></div>
+      <div class="creepy-face"></div>
+      Player 1
+    </div>
+    <div class="player-area" id="player2">
+      <div class="spooky-animation"></div>
+      <div class="blood-drip"></div>
+      <div class="creepy-face"></div>
+      Player 2
+    </div>
+    <div class="player-area" id="player3">
+      <div class="spooky-animation"></div>
+      <div class="blood-drip"></div>
+      <div class="creepy-face"></div>
+      Player 3
+    </div>
+    <div class="player-area" id="player4">
+      <div class="spooky-animation"></div>
+      <div class="blood-drip"></div>
+      <div class="creepy-face"></div>
+      Player 4
+    </div>
+  </div>
+
+  <!-- Add spooky sound effects -->
+  <audio id="spooky-sound" loop>
+    <source src="https://www.soundjay.com/horror/sounds/haunted-wind-01.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <audio id="scream-sound">
+    <source src="https://www.soundjay.com/horror/sounds/scream-01.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Play spooky sound on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const spookySound = document.getElementById('spooky-sound');
+      spookySound.volume = 0.5; // Adjust volume
+      spookySound.play();
+    });
+
+    // Add interactivity for player areas
+    const playerAreas = document.querySelectorAll('.player-area');
+    const screamSound = document.getElementById('scream-sound');
+
+    playerAreas.forEach(area => {
+      area.addEventListener('click', () => {
+        area.classList.toggle('active');
+        // Play a scream sound when activated
+        screamSound.currentTime = 0;
+        screamSound.play();
+      });
+    });
+  </script>
+</body>
+</html>
