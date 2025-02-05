@@ -1,183 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haunted Manor: 4-Player Horror Game</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background-color: #000;
-      color: #fff;
-      font-family: 'Creepster', cursive;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-image: url('https://i.imgur.com/7QZQZQZ.jpg'); /* Haunted mansion background */
-      background-size: cover;
-      background-position: center;
-    }
-
-    .game-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      width: 100vw;
-      height: 100vh;
-      gap: 10px;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-
-    .player-area {
-      position: relative;
-      background-color: rgba(17, 17, 17, 0.8); /* Semi-transparent dark background */
-      border: 3px solid #8b0000; /* Blood-red border */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 32px;
-      color: #ff0000; /* Blood-red text */
-      cursor: pointer;
-      overflow: hidden;
-      text-shadow: 2px 2px 5px #000;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .player-area:hover {
-      border-color: #ff4500; /* Brighter red on hover */
-      transform: scale(1.05);
-    }
-
-    .player-area.active {
-      border-color: #ff0000;
-      background-color: rgba(255, 0, 0, 0.1); /* Slight red glow when active */
-    }
-
-    .spooky-animation {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: url('https://i.imgur.com/9QZQZQZ.gif') no-repeat center center; /* Ghost animation */
-      background-size: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
-
-    .player-area.active .spooky-animation {
-      opacity: 1;
-    }
-
-    .haunted-text {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 48px;
-      color: #ff0000;
-      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
-      animation: flicker 1.5s infinite alternate;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 0.8; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-
-    .blood-drip {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://i.imgur.com/8QZQZQZ.png') no-repeat center center; /* Blood drip effect */
-      background-size: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
-
-    .player-area.active .blood-drip {
-      opacity: 0.7;
-    }
-
-    .creepy-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: url('https://i.imgur.com/6QZQZQZ.png') no-repeat center center; /* Creepy face */
-      background-size: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
-    }
-
-    .player-area.active .creepy-face {
-      opacity: 1;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <title>Amelia Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 </head>
 <body>
-  <div class="haunted-text">Welcome to the Haunted Manor</div>
-  <div class="game-container">
-    <div class="player-area" id="player1">
-      <div class="spooky-animation"></div>
-      <div class="blood-drip"></div>
-      <div class="creepy-face"></div>
-      Player 1
-    </div>
-    <div class="player-area" id="player2">
-      <div class="spooky-animation"></div>
-      <div class="blood-drip"></div>
-      <div class="creepy-face"></div>
-      Player 2
-    </div>
-    <div class="player-area" id="player3">
-      <div class="spooky-animation"></div>
-      <div class="blood-drip"></div>
-      <div class="creepy-face"></div>
-      Player 3
-    </div>
-    <div class="player-area" id="player4">
-      <div class="spooky-animation"></div>
-      <div class="blood-drip"></div>
-      <div class="creepy-face"></div>
-      Player 4
-    </div>
-  </div>
-
-  <!-- Add spooky sound effects -->
-  <audio id="spooky-sound" loop>
-    <source src="https://www.soundjay.com/horror/sounds/haunted-wind-01.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <audio id="scream-sound">
-    <source src="https://www.soundjay.com/horror/sounds/scream-01.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
-  <script>
-    // Play spooky sound on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      const spookySound = document.getElementById('spooky-sound');
-      spookySound.volume = 0.5; // Adjust volume
-      spookySound.play();
-    });
-
-    // Add interactivity for player areas
-    const playerAreas = document.querySelectorAll('.player-area');
-    const screamSound = document.getElementById('scream-sound');
-
-    playerAreas.forEach(area => {
-      area.addEventListener('click', () => {
-        area.classList.toggle('active');
-        // Play a scream sound when activated
-        screamSound.currentTime = 0;
-        screamSound.play();
-      });
-    });
-  </script>
+    <nav>
+        <div class="nav-container">
+            <div class="logo" data-aos="zoom-in" data-aos-duration="1000">
+                <span>Amelia</span>
+            </div>
+            <div class="links">
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="#">Home</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="#">About</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="#">Skills</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"><a href="#">Services</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500"><a href="#">Blogs</a></div>
+                <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="#">Contact Us</a></div>
+            </div>
+            <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+        </div>
+        <div class="dropdown">
+            <div class="links">
+                <a href="">Home</a>
+                <a href="">About</a>
+                <a href="">Skills</a>
+                <a href="">Services</a>
+                <a href="">Blogs</a>
+                <a href="">Contact Us</a>
+                <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+            </div>
+        </div>
+    </nav>
+        <section>
+            <div class="main-container">
+                <div class="image" data-aos="zoom-in-right" data-aos-duration="2500">
+                    <img src="main.png" alt="">
+                </div>
+                <div class="content">
+                    <h1 data-aos="fade-left" data-aos-duration="1000" data-aos-delay="800">Hey I'm <span>Amelia</span></h1>
+                    <div class="typewriter" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="900">I'm a <span></span></div>
+                    <p data-aos="flip-up" data-aos-duration="1000" data-aos-delay="1000">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione, perferendis quas consectetur possimus maxime consequatur cupiditate eos dolorum molestias praesentium error exercitationem rem labore illo, in dolor, odio corporis excepturi?</p>
+                    <div class="social-links" data-aos="flip-down" data-aos-duration="1000" data-aos-delay="1200">
+                        <a href="#" ><i class="fa-brands fa-github"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                    <div class="btn" data-aos="zoom-out-left" data-aos-duration="1000" data-aos-delay="1300">
+                        <button>Download CV</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        <script>
+          AOS.init({offset:0});
+        </script>
+        <script>
+            function hamburg(){
+                const navbar = document.querySelector(".dropdown")
+                navbar.style.transform = "translateY(0px)"
+            }
+            function cancel(){
+                const navbar = document.querySelector(".dropdown")
+                navbar.style.transform = "translateY(-500px)"
+            }
+        </script>
 </body>
 </html>
